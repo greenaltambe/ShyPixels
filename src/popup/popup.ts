@@ -8,6 +8,8 @@ const selectBtn = document.getElementById("selectBtn") as HTMLButtonElement;
 const clearAllBtn = document.getElementById("clearAllBtn") as HTMLButtonElement;
 const rulesList = document.getElementById("rulesList") as HTMLUListElement;
 const noRules = document.getElementById("noRules") as HTMLParagraphElement;
+const exportBtn = document.getElementById("exportBtn") as HTMLButtonElement;
+const importBtn = document.getElementById("importBtn") as HTMLButtonElement;
 
 let currentDomain = "";
 
@@ -99,6 +101,25 @@ selectBtn.addEventListener("click", () => {
 });
 
 clearAllBtn.addEventListener("click", clearAllRules);
+
+// Export all rules across all domains as JSON
+exportBtn.addEventListener("click", async () => {
+  const allData = await chrome.storage.local.get(null);
+  const blob = new Blob([JSON.stringify(allData, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "shypixels-rules.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// Import rules — open dedicated page in new tab (popup closes on file dialog focus loss)
+importBtn.addEventListener("click", () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL("pages/import.html") });
+});
 
 // Initialize popup
 (async () => {

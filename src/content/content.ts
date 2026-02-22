@@ -22,7 +22,7 @@ function showConfirmation(
   `;
 
   const title = document.createElement("div");
-  title.textContent = "WhatsBlur";
+  title.textContent = "ShyPixels";
   title.style.cssText = "font-weight: 700; font-size: 15px; margin-bottom: 8px; color: #4A90D9;";
 
   const info = document.createElement("div");

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsBlur</title>
+  <title>ShyPixels</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="container">
-    <h1>WhatsBlur</h1>
+    <h1>ShyPixels</h1>
     <p class="domain" id="domain"></p>
 
     <button id="selectBtn" class="btn btn-primary">Select Element</button>
@@ -20,6 +20,11 @@
       </div>
       <ul id="rulesList" class="rules-list"></ul>
       <p id="noRules" class="no-rules">No blur rules for this domain.</p>
+    </div>
+
+    <div class="io-section">
+      <button id="exportBtn" class="btn btn-secondary btn-small">Export Rules</button>
+      <button id="importBtn" class="btn btn-secondary btn-small">Import Rules</button>
     </div>
   </div>
 

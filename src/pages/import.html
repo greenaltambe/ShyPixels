@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShyPixels – Import Rules</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+    .card {
+      background: #22223a;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 480px;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    h1 {
+      font-size: 20px;
+      color: #4A90D9;
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .file-area {
+      border: 2px dashed rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      margin-bottom: 16px;
+    }
+    .file-area:hover, .file-area.dragover {
+      border-color: #4A90D9;
+    }
+    .file-area span {
+      font-size: 14px;
+      color: #888;
+    }
+    .file-area input { display: none; }
+    #status {
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: none;
+    }
+    #status.success {
+      display: block;
+      background: rgba(39, 174, 96, 0.15);
+      color: #27ae60;
+    }
+    #status.error {
+      display: block;
+      background: rgba(192, 57, 43, 0.15);
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Import Rules</h1>
+    <p>Select a ShyPixels JSON file to import. Imported rules are added to your existing rules without replacing them.</p>
+    <div class="file-area" id="dropZone">
+      <span>Click to select file or drag and drop</span>
+      <input type="file" id="fileInput" accept=".json">
+    </div>
+    <div id="status"></div>
+  </div>
+  <script src="import.js"></script>
+</body>
+</html>

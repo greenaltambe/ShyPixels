@@ -1,5 +1,5 @@
 {
-  "name": "whatsblur",
+  "name": "shypixels",
   "version": "1.0.0",
   "private": true,
   "description": "Select any element on any website and apply blur behavior.",
@@ -8,8 +8,6 @@
     "clean": "rm -rf dist"
   },
   "devDependencies": {
-    "@anthropic-ai/claude-code": "^2.1.50",
-    "@anthropic-ai/sdk": "^0.78.0",
     "@types/chrome": "^0.1.37",
     "esbuild": "^0.27.3",
     "typescript": "^5.4.0"

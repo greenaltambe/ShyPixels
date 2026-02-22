@@ -1,7 +1,8 @@
 import * as esbuild from "esbuild";
-import { cpSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { cpSync, mkdirSync, readFileSync, writeFileSync, existsSync, rmSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import { execSync } from "child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
@@ -19,7 +20,7 @@ await Promise.all([
     outfile: `${shared}/content/content.js`,
     format: "iife",
     target: "es2020",
-    minify: false,
+    minify: true,
   }),
   esbuild.build({
     entryPoints: [`${root}/src/background/background.ts`],
@@ -27,7 +28,7 @@ await Promise.all([
     outfile: `${shared}/background/background.js`,
     format: "esm",
     target: "es2020",
-    minify: false,
+    minify: true,
   }),
   esbuild.build({
     entryPoints: [`${root}/src/popup/popup.ts`],
@@ -35,7 +36,15 @@ await Promise.all([
     outfile: `${shared}/popup/popup.js`,
     format: "iife",
     target: "es2020",
-    minify: false,
+    minify: true,
+  }),
+  esbuild.build({
+    entryPoints: [`${root}/src/pages/import.ts`],
+    bundle: true,
+    outfile: `${shared}/pages/import.js`,
+    format: "iife",
+    target: "es2020",
+    minify: true,
   }),
 ]);
 
@@ -56,7 +65,7 @@ function makeManifest(target) {
     };
     // Firefox needs browser_specific_settings for add-on ID
     manifest.browser_specific_settings = {
-      gecko: { id: "whatsblur@extension", strict_min_version: "109.0" },
+      gecko: { id: "shypixels@extension", strict_min_version: "109.0" },
     };
   }
   // Chrome/Edge/Brave: base manifest already has service_worker — no changes needed
@@ -68,6 +77,7 @@ function makeManifest(target) {
 const staticAssets = [
   "popup/popup.html",
   "popup/popup.css",
+  "pages/import.html",
 ];
 
 for (const target of targets) {
@@ -89,19 +99,18 @@ for (const target of targets) {
     JSON.stringify(makeManifest(target), null, 2)
   );
 
-  // Placeholder icons
+  // Generate icons from icon.png
   const iconDir = join(out, "icons");
   mkdirSync(iconDir, { recursive: true });
-  const pngHeader = Buffer.from([
-    0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
-  ]);
-  for (const size of [16, 48, 128]) {
-    writeFileSync(join(iconDir, `icon${size}.png`), pngHeader);
+  const iconSrc = join(root, "icon.png");
+  if (existsSync(iconSrc)) {
+    for (const size of [16, 48, 128]) {
+      execSync(`magick "${iconSrc}" -resize ${size}x${size} "${join(iconDir, `icon${size}.png`)}"`);
+    }
   }
 }
 
 // Clean up shared temp
-import { rmSync } from "fs";
 rmSync(shared, { recursive: true });
 
 console.log("Build complete → dist/chrome, dist/firefox");

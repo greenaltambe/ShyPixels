@@ -136,3 +136,18 @@ h1 {
   text-align: center;
   padding: 12px 0;
 }
+
+.io-section {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 7px 10px;
+  font-size: 12px;
+  background: #2d2d44;
+  color: #ccc;
+  border: 1px solid rgba(255,255,255,0.1);
+}
