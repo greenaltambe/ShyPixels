@@ -11,6 +11,27 @@
     <h1>ShyPixels</h1>
     <p class="domain" id="domain"></p>
 
+    <div class="toggle-section">
+      <label class="toggle-row">
+        <span>Enabled on this site</span>
+        <input type="checkbox" id="siteToggle" checked>
+        <span class="toggle-slider"></span>
+      </label>
+      <label class="toggle-row">
+        <span>Enabled globally</span>
+        <input type="checkbox" id="globalToggle" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="intensity-section">
+      <label class="intensity-label">
+        <span>Blur intensity</span>
+        <span id="intensityValue">20px</span>
+      </label>
+      <input type="range" id="intensitySlider" min="1" max="50" value="20" class="slider">
+    </div>
+
     <button id="selectBtn" class="btn btn-primary">Select Element</button>
 
     <div class="rules-section">

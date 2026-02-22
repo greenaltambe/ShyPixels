@@ -28,6 +28,100 @@ h1 {
   margin-bottom: 14px;
 }
 
+.toggle-section {
+  margin-bottom: 12px;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+  cursor: pointer;
+  position: relative;
+}
+
+.toggle-row input[type="checkbox"] {
+  appearance: none;
+  width: 36px;
+  height: 20px;
+  background: #444;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle-row input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #ccc;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-row input[type="checkbox"]:checked {
+  background: #4A90D9;
+}
+
+.toggle-row input[type="checkbox"]:checked::after {
+  transform: translateX(16px);
+  background: white;
+}
+
+.toggle-slider {
+  display: none;
+}
+
+.intensity-section {
+  margin-bottom: 14px;
+}
+
+.intensity-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.intensity-label span:last-child {
+  color: #4A90D9;
+  font-weight: 600;
+}
+
+.slider {
+  width: 100%;
+  appearance: none;
+  height: 4px;
+  background: #444;
+  border-radius: 2px;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #4A90D9;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #4A90D9;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
 .btn {
   border: none;
   border-radius: 8px;

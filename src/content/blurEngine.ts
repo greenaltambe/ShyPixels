@@ -3,23 +3,34 @@ const HOVER_CLASS = "focusmask-hover";
 
 const processedElements = new WeakSet<Element>();
 let styleInjected = false;
+let styleEl: HTMLStyleElement | null = null;
 
 function injectStyles(): void {
   if (styleInjected) return;
   styleInjected = true;
 
-  const style = document.createElement("style");
-  style.id = "focusmask-styles";
-  style.textContent = `
+  styleEl = document.createElement("style");
+  styleEl.id = "focusmask-styles";
+  updateStyleContent(20);
+  document.head.appendChild(styleEl);
+}
+
+function updateStyleContent(intensity: number): void {
+  if (!styleEl) return;
+  styleEl.textContent = `
     .${BLUR_CLASS} {
-      filter: blur(20px) !important;
+      filter: blur(${intensity}px) !important;
       transition: filter 0.2s ease !important;
     }
     .${BLUR_CLASS}.${HOVER_CLASS}:hover {
       filter: none !important;
     }
   `;
-  document.head.appendChild(style);
+}
+
+export function setBlurIntensity(intensity: number): void {
+  injectStyles();
+  updateStyleContent(intensity);
 }
 
 export function applyBlur(
@@ -74,4 +85,11 @@ export function removeBlurFromSelector(selector: string): void {
   } catch {
     // Invalid selector
   }
+}
+
+export function removeAllBlurs(): void {
+  document.querySelectorAll(`.${BLUR_CLASS}`).forEach((el) => {
+    el.classList.remove(BLUR_CLASS, HOVER_CLASS);
+  });
+  // WeakSet has no clear(), but old refs will be GC'd. New elements will be re-tracked on re-enable.
 }

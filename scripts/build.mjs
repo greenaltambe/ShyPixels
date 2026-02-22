@@ -2,7 +2,7 @@ import * as esbuild from "esbuild";
 import { cpSync, mkdirSync, readFileSync, writeFileSync, existsSync, rmSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { execSync } from "child_process";
+import sharp from "sharp";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
@@ -105,7 +105,7 @@ for (const target of targets) {
   const iconSrc = join(root, "icon.png");
   if (existsSync(iconSrc)) {
     for (const size of [16, 48, 128]) {
-      execSync(`magick "${iconSrc}" -resize ${size}x${size} "${join(iconDir, `icon${size}.png`)}"`);
+      await sharp(iconSrc).resize(size, size).png().toFile(join(iconDir, `icon${size}.png`));
     }
   }
 }

@@ -1,13 +1,23 @@
-import { getRulesForDomain, type BlurRule } from "../utils/storage.js";
-import { applyBlurToSelector } from "./blurEngine.js";
+import { getRulesForDomain, isDisabled, getSettings, type BlurRule } from "../utils/storage.js";
+import { applyBlurToSelector, removeAllBlurs, setBlurIntensity } from "./blurEngine.js";
 
 let observer: MutationObserver | null = null;
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 const DEBOUNCE_MS = 200;
 
 let cachedRules: BlurRule[] = [];
+let currentlyDisabled = false;
 
-function applyAllRules(): void {
+async function applyAllRules(): Promise<void> {
+  currentlyDisabled = await isDisabled();
+  if (currentlyDisabled) {
+    removeAllBlurs();
+    return;
+  }
+
+  const settings = await getSettings();
+  setBlurIntensity(settings.blurIntensity);
+
   for (const rule of cachedRules) {
     applyBlurToSelector(rule.selector, rule.mode);
   }
@@ -15,12 +25,12 @@ function applyAllRules(): void {
 
 function handleMutations(): void {
   if (debounceTimer) clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(applyAllRules, DEBOUNCE_MS);
+  debounceTimer = setTimeout(() => { applyAllRules(); }, DEBOUNCE_MS);
 }
 
 export async function initRuleManager(): Promise<void> {
   cachedRules = await getRulesForDomain();
-  applyAllRules();
+  await applyAllRules();
 
   observer = new MutationObserver(handleMutations);
   observer.observe(document.body, {
@@ -31,7 +41,7 @@ export async function initRuleManager(): Promise<void> {
 
 export async function refreshRules(): Promise<void> {
   cachedRules = await getRulesForDomain();
-  applyAllRules();
+  await applyAllRules();
 }
 
 export function destroyRuleManager(): void {

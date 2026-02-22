@@ -3,6 +3,18 @@ interface BlurRule {
   mode: "permanent" | "hover";
 }
 
+interface ShyPixelsSettings {
+  globalDisabled: boolean;
+  disabledDomains: string[];
+  blurIntensity: number;
+}
+
+const DEFAULT_SETTINGS: ShyPixelsSettings = {
+  globalDisabled: false,
+  disabledDomains: [],
+  blurIntensity: 20,
+};
+
 const domainEl = document.getElementById("domain") as HTMLParagraphElement;
 const selectBtn = document.getElementById("selectBtn") as HTMLButtonElement;
 const clearAllBtn = document.getElementById("clearAllBtn") as HTMLButtonElement;
@@ -10,6 +22,10 @@ const rulesList = document.getElementById("rulesList") as HTMLUListElement;
 const noRules = document.getElementById("noRules") as HTMLParagraphElement;
 const exportBtn = document.getElementById("exportBtn") as HTMLButtonElement;
 const importBtn = document.getElementById("importBtn") as HTMLButtonElement;
+const siteToggle = document.getElementById("siteToggle") as HTMLInputElement;
+const globalToggle = document.getElementById("globalToggle") as HTMLInputElement;
+const intensitySlider = document.getElementById("intensitySlider") as HTMLInputElement;
+const intensityValue = document.getElementById("intensityValue") as HTMLSpanElement;
 
 let currentDomain = "";
 
@@ -105,6 +121,8 @@ clearAllBtn.addEventListener("click", clearAllRules);
 // Export all rules across all domains as JSON
 exportBtn.addEventListener("click", async () => {
   const allData = await chrome.storage.local.get(null);
+  // Exclude internal settings from export
+  delete allData._settings;
   const blob = new Blob([JSON.stringify(allData, null, 2)], {
     type: "application/json",
   });
@@ -121,10 +139,60 @@ importBtn.addEventListener("click", () => {
   chrome.tabs.create({ url: chrome.runtime.getURL("pages/import.html") });
 });
 
+// Settings helpers
+async function loadSettings(): Promise<ShyPixelsSettings> {
+  const result = await chrome.storage.local.get("_settings");
+  return { ...DEFAULT_SETTINGS, ...(result._settings as Partial<ShyPixelsSettings> ?? {}) };
+}
+
+async function saveSettings(settings: ShyPixelsSettings): Promise<void> {
+  await chrome.storage.local.set({ _settings: settings });
+  notifyContentScript("refreshRules");
+}
+
+// Site toggle — disable/enable for current domain
+siteToggle.addEventListener("change", async () => {
+  const settings = await loadSettings();
+  if (siteToggle.checked) {
+    settings.disabledDomains = settings.disabledDomains.filter((d) => d !== currentDomain);
+  } else {
+    if (!settings.disabledDomains.includes(currentDomain)) {
+      settings.disabledDomains.push(currentDomain);
+    }
+  }
+  await saveSettings(settings);
+});
+
+// Global toggle — disable/enable everywhere
+globalToggle.addEventListener("change", async () => {
+  const settings = await loadSettings();
+  settings.globalDisabled = !globalToggle.checked;
+  await saveSettings(settings);
+});
+
+// Intensity slider
+let intensityDebounce: ReturnType<typeof setTimeout> | null = null;
+intensitySlider.addEventListener("input", () => {
+  intensityValue.textContent = `${intensitySlider.value}px`;
+  if (intensityDebounce) clearTimeout(intensityDebounce);
+  intensityDebounce = setTimeout(async () => {
+    const settings = await loadSettings();
+    settings.blurIntensity = parseInt(intensitySlider.value, 10);
+    await saveSettings(settings);
+  }, 150);
+});
+
 // Initialize popup
 (async () => {
   currentDomain = await getCurrentDomain();
   domainEl.textContent = currentDomain || "N/A";
+
+  const settings = await loadSettings();
+  globalToggle.checked = !settings.globalDisabled;
+  siteToggle.checked = !settings.disabledDomains.includes(currentDomain);
+  intensitySlider.value = String(settings.blurIntensity);
+  intensityValue.textContent = `${settings.blurIntensity}px`;
+
   const rules = await getRules();
   renderRules(rules);
 })();

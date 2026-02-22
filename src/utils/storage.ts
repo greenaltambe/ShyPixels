@@ -3,8 +3,36 @@ export interface BlurRule {
   mode: "permanent" | "hover";
 }
 
+export interface ShyPixelsSettings {
+  globalDisabled: boolean;
+  disabledDomains: string[];
+  blurIntensity: number;
+}
+
+const DEFAULT_SETTINGS: ShyPixelsSettings = {
+  globalDisabled: false,
+  disabledDomains: [],
+  blurIntensity: 20,
+};
+
 function getDomain(): string {
   return location.hostname;
+}
+
+export async function getSettings(): Promise<ShyPixelsSettings> {
+  const result = await chrome.storage.local.get("_settings");
+  return { ...DEFAULT_SETTINGS, ...(result._settings as Partial<ShyPixelsSettings> ?? {}) };
+}
+
+export async function saveSettings(settings: ShyPixelsSettings): Promise<void> {
+  await chrome.storage.local.set({ _settings: settings });
+}
+
+export async function isDisabled(domain?: string): Promise<boolean> {
+  const settings = await getSettings();
+  if (settings.globalDisabled) return true;
+  const key = domain ?? getDomain();
+  return settings.disabledDomains.includes(key);
 }
 
 export async function getRulesForDomain(domain?: string): Promise<BlurRule[]> {
