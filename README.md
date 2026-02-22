@@ -1,61 +1,211 @@
-# ShyPixels
+# ShyPixels – Blur Any Element on Any Website
 
-Browser extension that lets you blur any element on any website. Rules are saved per domain and reapply automatically.
+ShyPixels is a cross-browser privacy extension that lets you blur any element on any website and automatically reapply it every time you visit.
+
+It is especially useful for:
+
+- Blurring WhatsApp Web recent chats sidebar
+- Hiding ChatGPT or Gemini chat history
+- Protecting LLM conversations in shared environments
+- Preventing shoulder surfing in offices, labs, or cafes
+- Hiding sensitive dashboard or admin panel data
 
 Works on Chrome, Edge, Brave, and Firefox.
 
-## Usage
+Repository: https://github.com/greenaltambe/ShyPixels
 
-1. Click the ShyPixels icon in the toolbar.
-2. Click "Select Element". The popup closes and selection mode starts.
-3. Hover over the page. The element under the cursor is highlighted.
+---
+
+## The Problem
+
+Modern web apps expose personal information directly in sidebars and previews:
+
+- WhatsApp Web shows your recent contacts
+- ChatGPT and Gemini display full chat history
+- Email clients show subject previews
+- Dashboards expose financial or operational data
+
+In shared environments, this creates privacy risks.
+
+ShyPixels gives you fine-grained control by letting you select and blur specific elements — permanently or until hover — with rules saved per domain.
+
+No custom CSS. No DevTools. No hacks.
+
+---
+
+## Features
+
+- Blur any element on any website
+- Per-domain rule storage
+- Blur permanently
+- Blur until hover (reveals on mouse over)
+- Adjustable blur intensity
+- Import / export rules (JSON)
+- Works with dynamic sites (LLMs, SPAs)
+- Cross-browser support (Manifest V3 architecture)
+
+---
+
+## Example Use Cases
+
+### 1. Blur WhatsApp Web Sidebar
+
+Hide your recent chats list so others cannot see who you are messaging.
+
+### 2. Hide ChatGPT or Gemini Chat History
+
+Blur your LLM sidebar to prevent others from reading previous conversations.
+
+Ideal for:
+
+- Open offices
+- University labs
+- Screen sharing
+- Recording tutorials
+- Working in public spaces
+
+### 3. Hide Sensitive Interface Sections
+
+Blur:
+
+- Finance dashboards
+- CRM panels
+- Admin tools
+- Email previews
+- Internal tools
+
+---
+
+## How It Works
+
+1. Click the ShyPixels icon in your browser toolbar.
+2. Click **Select Element**.
+3. Hover over the page — the element under your cursor highlights.
 4. Click the element you want to blur.
 5. Choose a mode:
-   - **Blur Always** -- element stays blurred.
-   - **Blur (Hover)** -- element is blurred but reveals when you hover over it.
-6. The rule is saved. It reapplies on every visit to that domain.
+   - **Blur Always** — permanently blurred
+   - **Blur (Hover)** — blurred until mouse hover
+6. The rule is saved automatically.
+7. It reapplies every time you visit that domain.
 
-### Managing Rules
+Press **Escape** during selection to cancel.
 
-- Open the popup to see all rules for the current domain.
-- Click the X next to a rule to remove it.
-- Click "Clear All" to remove all rules for the current domain.
-- Press Escape during selection to cancel.
+---
 
-### Import / Export
+## Managing Rules
 
-- Click "Export Rules" to download all rules (all domains) as a JSON file.
-- Click "Import Rules" to load rules from a JSON file. Imported rules are added to existing rules without removing them.
+Open the popup to:
+
+- View all rules for the current domain
+- Remove individual rules
+- Clear all rules for a domain
+- Adjust blur intensity
+
+Rules are scoped per domain and applied automatically on page load.
+
+---
+
+## Import / Export Rules
+
+### Export
+
+Download all blur rules (across all domains) as a JSON file.
+
+### Import
+
+Import rules from a JSON file.  
+Imported rules are merged with existing rules.
+
+Useful for:
+
+- Backups
+- Sharing configurations
+- Multi-device setup
+
+---
+
+## Browser Compatibility
+
+- Google Chrome
+- Microsoft Edge
+- Brave
+- Mozilla Firefox
+
+Built using modern WebExtension APIs and Manifest V3.
+
+---
+
+# Installation
+
+## Chrome / Edge / Brave (Developer Mode)
+
+1. Run:
+
+```bash
+npm run build
+```
+
+2. Open:
+   - chrome://extensions
+   - edge://extensions
+   - brave://extensions
+
+3. Enable **Developer mode**
+4. Click **Load unpacked**
+5. Select:
+
+```
+dist/chrome
+```
+
+After code changes:
+
+- Run `npm run build`
+- Click reload on the extension card
+
+---
+
+## Firefox (Temporary Add-on)
+
+1. Run:
+
+```bash
+npm run build
+```
+
+2. Open:
+
+```
+about:debugging#/runtime/this-firefox
+```
+
+3. Click **Load Temporary Add-on**
+4. Select:
+
+```
+dist/firefox/manifest.json
+```
+
+Temporary add-ons are removed when Firefox closes.
 
 ---
 
 ## Development
 
-### Build
+Build:
 
-```
+```bash
 npm run build
 ```
 
-> Note: magick dependency is required to build
+Requirements:
 
-Output goes to `dist/chrome` and `dist/firefox`.
+- Node.js
+- npm
 
-The build script generates browser-specific manifests from the base manifest.
+Output:
 
-### Load in Chrome / Edge / Brave
+- `dist/chrome`
+- `dist/firefox`
 
-1. Go to `chrome://extensions` (or `edge://extensions`, `brave://extensions`).
-2. Enable Developer mode.
-3. Click "Load unpacked".
-4. Select the `dist/chrome` folder.
-
-After code changes, run `npm run build` and click the reload button on the extension card.
-
-### Load in Firefox
-
-1. Go to `about:debugging#/runtime/this-firefox`.
-2. Click "Load Temporary Add-on".
-3. Select `dist/firefox/manifest.json`.
-
-Temporary add-ons are removed when Firefox closes.
+The build system generates browser-specific manifests automatically.
