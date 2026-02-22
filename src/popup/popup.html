@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsBlur</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>WhatsBlur</h1>
+    <p class="domain" id="domain"></p>
+
+    <button id="selectBtn" class="btn btn-primary">Select Element</button>
+
+    <div class="rules-section">
+      <div class="rules-header">
+        <h2>Active Rules</h2>
+        <button id="clearAllBtn" class="btn btn-danger btn-small">Clear All</button>
+      </div>
+      <ul id="rulesList" class="rules-list"></ul>
+      <p id="noRules" class="no-rules">No blur rules for this domain.</p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
