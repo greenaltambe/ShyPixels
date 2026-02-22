@@ -65,7 +65,7 @@ function makeManifest(target) {
     };
     // Firefox needs browser_specific_settings for add-on ID
     manifest.browser_specific_settings = {
-      gecko: { id: "shypixels@extension", strict_min_version: "109.0" },
+      gecko: { id: "shypixels@extension", strict_min_version: "112.0", data_collection_permissions: { required: [], optional: [] } },
     };
   }
   // Chrome/Edge/Brave: base manifest already has service_worker — no changes needed
