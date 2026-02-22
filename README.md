@@ -1,37 +1,25 @@
 # ShyPixels – Blur Any Element on Any Website
 
-ShyPixels is a cross-browser privacy extension that lets you blur any element on any website and automatically reapply it every time you visit.
+ShyPixels is a cross-browser privacy extension that lets users blur any element on any website and automatically reapply it every time they visit.
 
-It is especially useful for:
+It helps protect sensitive information in shared or public environments.
 
-- Blurring WhatsApp Web recent chats sidebar
-- Hiding ChatGPT or Gemini chat history
-- Protecting LLM conversations in shared environments
-- Preventing shoulder surfing in offices, labs, or cafes
-- Hiding sensitive dashboard or admin panel data
-
-Works on Chrome, Edge, Brave, and Firefox.
-
-Repository: https://github.com/greenaltambe/ShyPixels
+Repository:  
+https://github.com/greenaltambe/ShyPixels
 
 ---
 
-## The Problem
+## Privacy & Data Collection
 
-Modern web apps expose personal information directly in sidebars and previews:
+ShyPixels:
 
-- WhatsApp Web shows your recent contacts
-- ChatGPT and Gemini display full chat history
-- Email clients show subject previews
-- Dashboards expose financial or operational data
+- Does NOT collect personal data
+- Does NOT transmit any data externally
+- Does NOT use remote servers
+- Does NOT use analytics
+- Stores all rules locally using the browser’s `storage` API
 
-In shared environments, this creates privacy risks.
-
-ShyPixels gives you fine-grained control by letting you select and blur specific elements — permanently or until hover — with rules saved per domain.
-
-No custom CSS. No DevTools. No hacks.
-
----
+All blur rules are saved locally on the user's device and never leave the browser.
 
 ## Features
 
@@ -41,50 +29,27 @@ No custom CSS. No DevTools. No hacks.
 - Blur until hover (reveals on mouse over)
 - Adjustable blur intensity
 - Import / export rules (JSON)
-- Works with dynamic sites (LLMs, SPAs)
-- Cross-browser support (Manifest V3 architecture)
 
 ---
 
 ## Example Use Cases
 
-### 1. Blur WhatsApp Web Sidebar
-
-Hide your recent chats list so others cannot see who you are messaging.
-
-### 2. Hide ChatGPT or Gemini Chat History
-
-Blur your LLM sidebar to prevent others from reading previous conversations.
-
-Ideal for:
-
-- Open offices
-- University labs
-- Screen sharing
-- Recording tutorials
-- Working in public spaces
-
-### 3. Hide Sensitive Interface Sections
-
-Blur:
-
-- Finance dashboards
-- CRM panels
-- Admin tools
-- Email previews
-- Internal tools
+- Blur messaging sidebars in shared environments
+- Hide AI chat history during screen sharing
+- Protect dashboard data in public spaces
+- Prevent shoulder surfing in offices or labs
 
 ---
 
 ## How It Works
 
-1. Click the ShyPixels icon in your browser toolbar.
+1. Click the ShyPixels icon.
 2. Click **Select Element**.
-3. Hover over the page — the element under your cursor highlights.
-4. Click the element you want to blur.
+3. Hover over the page — the element under the cursor highlights.
+4. Click the element to blur.
 5. Choose a mode:
-   - **Blur Always** — permanently blurred
-   - **Blur (Hover)** — blurred until mouse hover
+   - **Blur Always**
+   - **Blur (Hover)**
 6. The rule is saved automatically.
 7. It reapplies every time you visit that domain.
 
@@ -92,120 +57,104 @@ Press **Escape** during selection to cancel.
 
 ---
 
-## Managing Rules
+## Rule Management
 
-Open the popup to:
+From the popup you can:
 
-- View all rules for the current domain
+- View rules for the current domain
 - Remove individual rules
-- Clear all rules for a domain
+- Clear all rules
 - Adjust blur intensity
+- Import or export rules
 
-Rules are scoped per domain and applied automatically on page load.
+Rules are domain-scoped and automatically applied on page load.
 
 ---
 
-## Import / Export Rules
+## Import / Export
 
 ### Export
 
-Download all blur rules (across all domains) as a JSON file.
+Exports all blur rules as a JSON file.
 
 ### Import
 
-Import rules from a JSON file.  
-Imported rules are merged with existing rules.
+Imports JSON rules and merges them with existing rules.
 
 Useful for:
 
-- Backups
+- Backup
+- Device migration
 - Sharing configurations
-- Multi-device setup
 
 ---
 
 ## Browser Compatibility
 
-- Google Chrome
-- Microsoft Edge
+- Firefox
+- Chrome
+- Edge
 - Brave
-- Mozilla Firefox
 
-Built using modern WebExtension APIs and Manifest V3.
+Built using WebExtension APIs and Manifest V3.
 
----
+## Requirements
 
-# Installation
+- Node.js
+- npm
 
-## Chrome / Edge / Brave (Developer Mode)
+## Install Dependencies
 
-1. Run:
+```bash
+npm install
+```
+
+## Build
 
 ```bash
 npm run build
 ```
 
-2. Open:
-   - chrome://extensions
-   - edge://extensions
-   - brave://extensions
-
-3. Enable **Developer mode**
-4. Click **Load unpacked**
-5. Select:
+Build output:
 
 ```
 dist/chrome
+dist/firefox
 ```
 
-After code changes:
-
-- Run `npm run build`
-- Click reload on the extension card
+The build system generates browser-specific manifests automatically.
 
 ---
 
-## Firefox (Temporary Add-on)
+## Firefox Local Testing
 
-1. Run:
-
-```bash
-npm run build
-```
-
-2. Open:
+1. Open:
 
 ```
 about:debugging#/runtime/this-firefox
 ```
 
-3. Click **Load Temporary Add-on**
-4. Select:
+2. Click **Load Temporary Add-on**
+3. Select:
 
 ```
 dist/firefox/manifest.json
 ```
 
-Temporary add-ons are removed when Firefox closes.
-
 ---
 
-## Development
+## Chrome Local Testing
 
-Build:
+1. Open:
 
-```bash
-npm run build
+```
+chrome://extensions
 ```
 
-Requirements:
+2. Enable Developer Mode
+3. Click **Load unpacked**
+4. Select:
 
-- Node.js
-- npm
-
-Output:
-
-- `dist/chrome`
-- `dist/firefox`
-
-The build system generates browser-specific manifests automatically.
+```
+dist/chrome
+```
