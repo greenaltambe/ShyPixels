@@ -37,6 +37,8 @@ Works on Chrome, Edge, Brave, and Firefox.
 npm run build
 ```
 
+> Note: magick dependency is required to build
+
 Output goes to `dist/chrome` and `dist/firefox`.
 
 The build script generates browser-specific manifests from the base manifest.
